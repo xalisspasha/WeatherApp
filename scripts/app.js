@@ -19,7 +19,6 @@ const updateUi = (data) => {
 
     // update details template
     details.innerHTML = `
-
     <div class="text-muted text-uppercase text-center details">
                 <h5 class="my-3">${cityDets.EnglishName}</h5>
                 <div class="my-3">${weather.WeatherText}</div>
@@ -34,10 +33,11 @@ const updateUi = (data) => {
         card.classList.remove("d-none")
     }
 
+    // ternary operator (if/else)
     let timeSrc = weather.IsDayTime ? "img/day.svg" : "img/night.svg";
 
 
-    // update image time
+    // update src of image time
     time.setAttribute("src", timeSrc)
 
     // update icon
@@ -51,6 +51,7 @@ const updateCity = async (city) => {
     const cityDets = await getCity(city);
     const weather = await getWeather(cityDets.Key);
 
+    // if key and value same thing we can use object shorthand just write one of them !
     return {
         cityDets,
         weather
@@ -69,4 +70,12 @@ cityForm.addEventListener('submit', (e) => {
 
     updateCity(city).then(data => updateUi(data)).catch(err => console.log(err))
 
+    localStorage.setItem('city', city);
+
 })
+
+if (localStorage.getItem('city')) {
+    updateCity(localStorage.getItem('city'))
+        .then(data => updateUi(data))
+        .catch(err => console.log(err))
+}
